@@ -8,11 +8,11 @@
 	<parent>
 	    <groupId>org.jsoftware</groupId>
 	    <artifactId>jsoftware</artifactId>
-	    <version>1.7.1</version>
+	    <version>1.8.0</version>
 	</parent>
 
 	<url>https://github.com/m-szalik/javamail/wiki</url>
-	<name>Javamail: Extensions for JavaMail 1.5.5 (jdk7)</name>
+	<name>Javamail: Extensions for JavaMail 1.6.2 (jdk8)</name>
 
     <licenses>
         <license>
@@ -23,7 +23,7 @@
     </licenses>
 
     <properties>
-        <javamail.version>1.5.5</javamail.version> <!-- this is for jetty example only -->
+        <javamail.version>1.6.2</javamail.version> <!-- this is for jetty example only -->
     </properties>
 
     <dependencies>
@@ -55,13 +55,13 @@
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>javax.mail-api</artifactId>
-                <version>1.5.5</version> <!-- cannot use ${javamail.version} variable here because VersionEye doesn't support that -->
+                <version>1.6.2</version> <!-- cannot use ${javamail.version} variable here because VersionEye doesn't support that -->
             </dependency>
             <!-- test and examples sub-projects dependencies below -->
             <dependency>
                 <groupId>com.sun.mail</groupId>
                 <artifactId>javax.mail</artifactId>
-                <version>1.5.5</version>
+                <version>1.6.2</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>

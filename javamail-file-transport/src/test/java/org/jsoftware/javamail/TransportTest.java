@@ -68,14 +68,12 @@ public class TransportTest {
         outputStream = new ByteArrayOutputStream();
     }
 
-
-
 	@Test
 	public void transportTxtTest() throws MessagingException, IOException, NoSuchAlgorithmException {
 		AbstractFileTransport transport = (AbstractFileTransport) session.getTransport("filetxt");
         transport.writeMessage(generateMessage(), outputStream);
         String fileContent = new String(outputStream.toByteArray());
-        assertEquals(fileContent, IOUtils.toString(getClass().getResourceAsStream("transportTest-expected.txt"), "UTF-8"));
+        assertEquals(IOUtils.toString(getClass().getResourceAsStream("transportTest-expected.txt"), "UTF-8"), fileContent);
 	}
 
     @Test
@@ -83,7 +81,7 @@ public class TransportTest {
         AbstractFileTransport transport = (AbstractFileTransport) session.getTransport("filemsg");
         transport.writeMessage(generateMessage(), outputStream);
         String fileContent = new String(outputStream.toByteArray());
-        assertEquals(normalizeContent(fileContent), normalizeContent(IOUtils.toString(getClass().getResourceAsStream("transportTest-expected.msg"), "UTF-8")));
+        assertEquals(normalizeContent(IOUtils.toString(getClass().getResourceAsStream("transportTest-expected.msg"), "UTF-8")), normalizeContent(fileContent));
     }
 
     private static String normalizeContent(String input) {
@@ -91,6 +89,10 @@ public class TransportTest {
         StringBuilder sb = new StringBuilder();
         for(String line : input.split("\n")) {
             line = trimTailPattern.matcher(line).replaceAll("");
+            if (line.startsWith("Date:")) { // Skip date added in Java Mail 1.6
+                continue;
+            }
+
             if (line.startsWith("Message-ID:")) {
                 sb.append("Message-ID: testID\n");
                 continue;
