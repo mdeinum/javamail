@@ -50,7 +50,7 @@ public class JavaMailJMSStatisticsTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         javaMailJMSStatistics.unregisterFromJMX();
     }
 
@@ -80,12 +80,7 @@ public class JavaMailJMSStatisticsTest {
     @Test
     public void testJmxListener() throws Exception {
         final StringBuilder result = new StringBuilder();
-        NotificationListener listener = new NotificationListener() {
-            @Override
-            public void handleNotification(Notification notification, Object handback) {
-                result.append(notification.getType());
-            }
-        };
+        NotificationListener listener = (notification, handback) -> result.append(notification.getType());
         MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
         platformMBeanServer.addNotificationListener(JavaMailJMSStatistics.JMX_OBJECT_NAME, listener, null, this);
         javaMailJMSStatistics.onSuccess(mimeMessage, addressesTo);
@@ -121,7 +116,7 @@ public class JavaMailJMSStatisticsTest {
     public void testGetAttributes() throws Exception {
         List<String> attrNames = Arrays.asList("countSuccessful", "countFailure");
         MBeanServer platformMBeanServer = ManagementFactory.getPlatformMBeanServer();
-        AttributeList attributeList = platformMBeanServer.getAttributes(JavaMailJMSStatistics.JMX_OBJECT_NAME, attrNames.toArray(new String[attrNames.size()]));
+        AttributeList attributeList = platformMBeanServer.getAttributes(JavaMailJMSStatistics.JMX_OBJECT_NAME, attrNames.toArray(new String[0]));
         List<Attribute> list = attributeList.asList();
         for(Attribute attribute : list) {
             if (attrNames.contains(attribute.getName())) {
@@ -134,13 +129,13 @@ public class JavaMailJMSStatisticsTest {
     }
 
     @Test
-    public void testGetAttributesEmpty() throws Exception {
+    public void testGetAttributesEmpty() {
         AttributeList attributeList = javaMailJMSStatistics.getAttributes(new String[0]);
         assertEquals(0, attributeList.size());
     }
 
     @Test(expected = Exception.class)
-    public void testGetAttributesNotFound() throws Exception {
+    public void testGetAttributesNotFound() {
         javaMailJMSStatistics.getAttributes(new String[] {"NotExistingProperty"});
     }
 

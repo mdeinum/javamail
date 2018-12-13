@@ -12,7 +12,7 @@ public class TestContextFactory implements InitialContextFactory {
     static Context context;
 
     @Override
-    public Context getInitialContext(Hashtable<?, ?> environment) throws NamingException {
+    public Context getInitialContext(Hashtable<?, ?> environment) {
         return context;
     }
 }

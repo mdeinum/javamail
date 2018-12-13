@@ -78,18 +78,10 @@ public class JmsIntegrationTest {
         JavaMailJMSStatistics javaMailJMSStatistics = Mockito.mock(JavaMailJMSStatistics.class);
         JMS2JavaMail jms2JavaMail = new JMS2JavaMail(sessionDelegate, javaMailJMSStatistics);
         final BytesMessage inBytesMessage = Mockito.mock(BytesMessage.class);
-        when(sessionDelegate.createMimeMessage(any(InputStream.class))).then(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return new MimeMessage(javamail, (InputStream) invocation.getArguments()[0]);
-            }
-        });
-        when(inBytesMessage.readBytes(any(byte[].class))).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                byte[] arg = (byte[]) invocation.getArguments()[0];
-                return outIs.read(arg);
-            }
+        when(sessionDelegate.createMimeMessage(any(InputStream.class))).then(invocation -> new MimeMessage(javamail, (InputStream) invocation.getArguments()[0]));
+        when(inBytesMessage.readBytes(any(byte[].class))).thenAnswer(invocation -> {
+            byte[] arg = (byte[]) invocation.getArguments()[0];
+            return outIs.read(arg);
         });
         Transport tr2 = Mockito.mock(Transport.class);
         when(sessionDelegate.findTransport(eq("smtps"))).thenReturn(tr2);

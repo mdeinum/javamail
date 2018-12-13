@@ -24,13 +24,13 @@ public class AbstractFileTransportTest {
     private AbstractFileTransport transport;
 
     @Before
-    public void setUp() throws MessagingException, IOException {
+    public void setUp() {
         Properties properties = new Properties();
         properties.put("mail.files.path", "target" + File.separatorChar + "output");
         Session session = Session.getDefaultInstance(properties);
         transport = new AbstractFileTransport(session, new URLName("AbstractFileDev")) {
             @Override
-            protected void writeMessage(Message message, OutputStream os) throws IOException, MessagingException {
+            protected void writeMessage(Message message, OutputStream os) {
                 // do nothing
             }
             @Override
@@ -42,17 +42,12 @@ public class AbstractFileTransportTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         cleanup();
     }
 
     private void cleanup() {
-        File[] files = transport.getDirectory().listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.startsWith(BASE_NAME) && name.endsWith("." + BASE_EXT);
-            }
-        });
+        File[] files = transport.getDirectory().listFiles((dir, name) -> name.startsWith(BASE_NAME) && name.endsWith("." + BASE_EXT));
         if (files != null) {
             for(File f : files) {
                 f.delete();

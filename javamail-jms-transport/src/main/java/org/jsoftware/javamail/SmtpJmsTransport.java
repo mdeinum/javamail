@@ -139,7 +139,7 @@ public class SmtpJmsTransport extends Transport {
 
 
     @Override
-    protected boolean protocolConnect(String host, int port, String user, String password) throws MessagingException {
+    protected boolean protocolConnect(String host, int port, String user, String password) {
         return true;
     }
 

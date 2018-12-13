@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 @Startup
 public class JavaMailJMSStatistics extends NotificationBroadcasterSupport implements JavaMailJMSStatisticsLocal, DynamicMBean {
     public static final String NOTIFICATION_TYPE_SUCCESS = "JavaMail-Send-Success";
-    public static final String JAVA_MAIL_SEND_FAILURE = "JavaMail-Send-Failure";
+    private static final String JAVA_MAIL_SEND_FAILURE = "JavaMail-Send-Failure";
     public static final ObjectName JMX_OBJECT_NAME;
     private static final Logger logger = Logger.getLogger(JavaMailJMSStatistics.class.getName());
 
@@ -204,7 +204,7 @@ public class JavaMailJMSStatistics extends NotificationBroadcasterSupport implem
     }
 
     @Override
-    public Object getAttribute(String attribute) throws AttributeNotFoundException, MBeanException, ReflectionException {
+    public Object getAttribute(String attribute) throws AttributeNotFoundException {
         if ("statisticsCollectionStartDate".equalsIgnoreCase(attribute)) {
             return startDate == null ? null : new Date(startDate.getTime());
         }
@@ -224,7 +224,7 @@ public class JavaMailJMSStatistics extends NotificationBroadcasterSupport implem
     }
 
     @Override
-    public void setAttribute(Attribute attribute) throws AttributeNotFoundException, InvalidAttributeValueException, MBeanException, ReflectionException {
+    public void setAttribute(Attribute attribute) throws InvalidAttributeValueException {
         throw new InvalidAttributeValueException("Attribute " + attribute + " is read-only.");
     }
 
@@ -244,7 +244,7 @@ public class JavaMailJMSStatistics extends NotificationBroadcasterSupport implem
 
 
     @Override
-    public Object invoke(String actionName, Object[] params, String[] signature) throws MBeanException, ReflectionException {
+    public Object invoke(String actionName, Object[] params, String[] signature) {
         if ("reset".equalsIgnoreCase(actionName)) {
             reset();
             return startDate == null ? null : new Date(startDate.getTime());

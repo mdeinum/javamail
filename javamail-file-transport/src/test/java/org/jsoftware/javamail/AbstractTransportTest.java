@@ -38,7 +38,7 @@ public class AbstractTransportTest {
     private TransportListener transportListener;
 
     @Before
-    public void setUp() throws MessagingException, IOException {
+    public void setUp() throws MessagingException {
         Properties properties = new Properties();
         properties.put("mail.files.path", "target" + File.separatorChar + "output");
         Session session = Session.getDefaultInstance(properties);

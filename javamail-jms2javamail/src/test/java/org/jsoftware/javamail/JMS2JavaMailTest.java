@@ -45,12 +45,7 @@ public class JMS2JavaMailTest {
         sessionDelegate = Mockito.mock(JavaMailSessionDelegate.class);
         javaMailJMSStatistics = Mockito.mock(JavaMailJMSStatistics.class);
         jms2JavaMail = new JMS2JavaMail(sessionDelegate, javaMailJMSStatistics);
-        when(sessionDelegate.createMimeMessage(any(InputStream.class))).then(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-            return new MimeMessage(session, (InputStream) invocation.getArguments()[0]);
-            }
-        });
+        when(sessionDelegate.createMimeMessage(any(InputStream.class))).then(invocation -> new MimeMessage(session, (InputStream) invocation.getArguments()[0]));
     }
 
 
@@ -63,12 +58,7 @@ public class JMS2JavaMailTest {
         mimeMessage.writeTo(oos);
         BytesMessage message = Mockito.mock(BytesMessage.class);
         final ByteArrayInputStream messageBytes = new ByteArrayInputStream(out.toByteArray());
-        when(message.readBytes(any(byte[].class))).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-            return messageBytes.read((byte[]) invocation.getArguments()[0]);
-            }
-        });
+        when(message.readBytes(any(byte[].class))).thenAnswer(invocation -> messageBytes.read((byte[]) invocation.getArguments()[0]));
         return message;
     }
 
@@ -139,7 +129,7 @@ public class JMS2JavaMailTest {
 
 
     @Test(expected = IllegalStateException.class)
-    public void testCheckForNullSession() throws Exception {
+    public void testCheckForNullSession() {
         JMS2JavaMail jms2JavaMail = new JMS2JavaMail();
         jms2JavaMail.init();
     }

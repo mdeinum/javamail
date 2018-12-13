@@ -27,7 +27,7 @@ abstract class AbstractTransport extends Transport {
 	}
 
     @Override
-	public void connect(String host, int port, String user, String password) throws MessagingException {
+	public void connect(String host, int port, String user, String password) {
 		// do nothing because we do not need to connect anywhere
         notifyConnectionListeners(ConnectionEvent.OPENED);
 	}
@@ -38,7 +38,7 @@ abstract class AbstractTransport extends Transport {
 	}
 
 	@Override
-	public void close() throws MessagingException {
+	public void close() {
 		// do nothing, we didn't have to connect so we also do not have to disconnect.
         notifyConnectionListeners(ConnectionEvent.DISCONNECTED);
         notifyConnectionListeners(ConnectionEvent.CLOSED);

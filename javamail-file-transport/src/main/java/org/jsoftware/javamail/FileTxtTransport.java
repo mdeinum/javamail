@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -32,11 +33,9 @@ public class FileTxtTransport extends AbstractFileTransport {
 
     @Override
     protected void writeMessage(Message message, OutputStream os) throws IOException, MessagingException {
-        OutputStreamWriter writer = null;
-        try {
-            writer = new OutputStreamWriter(os, "UTF-8");
+        try (OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
             // Ordered headers
-            for(String header : HEADERS_ORDER) {
+            for (String header : HEADERS_ORDER) {
                 addHeader(message, header, writer);
             }
             // Other headers
@@ -53,7 +52,7 @@ public class FileTxtTransport extends AbstractFileTransport {
             Object content = message.getContent();
             String body = null;
             if (content instanceof Multipart) {
-                for(Map.Entry<String,Collection<String>> me : extractTextParts((Multipart) content).entrySet()) {
+                for (Map.Entry<String, Collection<String>> me : extractTextParts((Multipart) content).entrySet()) {
                     String key = me.getKey().toLowerCase();
                     String firstText = me.getValue().iterator().next();
                     if (key.startsWith("text/plain")) {
@@ -74,10 +73,6 @@ public class FileTxtTransport extends AbstractFileTransport {
                 writer.append(body);
             }
             writer.append('\n');
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
         }
     }
 
