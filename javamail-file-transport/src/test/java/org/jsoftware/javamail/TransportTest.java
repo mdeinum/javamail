@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +34,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -48,7 +47,7 @@ public class TransportTest {
     private File outDir;
 
     @Before
-    public void setUp() throws AddressException, IOException {
+    public void setUp() throws AddressException {
         String outDirName = "target/output";
         Properties properties = new Properties();
         outDir = new File(outDirName);
@@ -69,7 +68,7 @@ public class TransportTest {
     }
 
 	@Test
-	public void transportTxtTest() throws MessagingException, IOException, NoSuchAlgorithmException {
+	public void transportTxtTest() throws MessagingException, IOException {
 		AbstractFileTransport transport = (AbstractFileTransport) session.getTransport("filetxt");
         transport.writeMessage(generateMessage(), outputStream);
         String fileContent = new String(outputStream.toByteArray());
@@ -77,7 +76,7 @@ public class TransportTest {
 	}
 
     @Test
-    public void transportMsgTest() throws MessagingException, IOException, NoSuchAlgorithmException {
+    public void transportMsgTest() throws MessagingException, IOException {
         AbstractFileTransport transport = (AbstractFileTransport) session.getTransport("filemsg");
         transport.writeMessage(generateMessage(), outputStream);
         String fileContent = new String(outputStream.toByteArray());
